@@ -1,4 +1,6 @@
-const io = require('socket.io');
+/* eslint-disable linebreak-style */
+// const io = require('socket.io');
+const {Server} = require('socket.io');
 const users = require('./users');
 
 /**
@@ -42,8 +44,23 @@ function initSocket(socket) {
     });
 }
 
+// module.exports = (server) => {
+//   io({ path: '/bridge', serveClient: false })
+//     .listen(server, { log: true })
+//     .on('connection', initSocket);
+// };
+
+
+
 module.exports = (server) => {
-  io({ path: '/bridge', serveClient: false })
-    .listen(server, { log: true })
-    .on('connection', initSocket);
+  const io = new Server(server, {
+    cors: {
+      origin: 'http://localhost:3000',
+      credentials: true
+    }
+  });
+  io.on('connection', initSocket);
+  // io({ path: '/bridge', serveClient: false })
+  //   .listen(server, { log: true })
+  //   .on('connection', initSocket);
 };
